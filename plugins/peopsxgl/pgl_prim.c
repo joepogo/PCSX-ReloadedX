@@ -390,6 +390,7 @@ void SetSemiTrans(void)
      obm2=TransSets[GlobalTextABR].dstFac;
      glBlendFunc(obm1,obm2);                           // set blend func
     }
+#ifndef _XBOX
    else
    if(TransSets[GlobalTextABR].dstFac !=GL_ONE_MINUS_SRC_COLOR)
     {
@@ -406,16 +407,19 @@ void SetSemiTrans(void)
      obm2=TransSets[GlobalTextABR].dstFac;
      glBlendFunc(GL_ONE,GL_ONE);                       // set blend func
     }
+#endif
   }
 }
 
 void SetScanTrans(void)                                // blending for scan lines
 {
- if(glBlendEquationEXTEx!=NULL) // NULL on XBox
+#ifndef _XBOX
+ if(glBlendEquationEXTEx!=NULL) // NULL on XBox -> no need to check for NULL then
   {
    if(obm2==GL_ONE_MINUS_SRC_COLOR)
     glBlendEquationEXTEx(FUNC_ADD_EXT);
   }
+#endif
 
  obm1=TransSets[0].srcFac;
  obm2=TransSets[0].dstFac;
@@ -424,11 +428,13 @@ void SetScanTrans(void)                                // blending for scan line
 
 void SetScanTexTrans(void)                             // blending for scan mask texture
 {
- if(glBlendEquationEXTEx!=NULL) // NULL on XBox
+#ifndef _XBOX
+ if(glBlendEquationEXTEx!=NULL) // NULL on XBox -> no need to check for NULL then
   {
    if(obm2==GL_ONE_MINUS_SRC_COLOR)
     glBlendEquationEXTEx(FUNC_ADD_EXT);
   }
+#endif
 
  obm1=TransSets[2].srcFac;
  obm2=TransSets[2].dstFac;

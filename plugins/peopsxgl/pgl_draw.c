@@ -752,7 +752,7 @@ int GLinitialize()
 // clean up OGL stuff
 ////////////////////////////////////////////////////////////////////////
 
-void GLcleanup(int iDestoryContext) 
+void GLcleanup(int iDestroyContext) 
 {                                                     
  KillDisplayLists();                                   // bye display lists
 
@@ -772,7 +772,7 @@ void GLcleanup(int iDestoryContext)
  CleanupTextureStore();                                // bye textures
 
 #ifdef _XBOX
- if(iDestoryContext) // We need these left around for the GUI
+ if(iDestroyContext) // We need these left around for the GUI
  {
    wglMakeCurrent(NULL, NULL);                         // bye context
    wglDeleteContext(NULL);
