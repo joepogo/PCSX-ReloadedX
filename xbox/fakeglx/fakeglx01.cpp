@@ -58,7 +58,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define TEXTURE1_SGIS							0x835F
 #define D3D_TEXTURE_MAXANISOTROPY				0xf70001
 
-#define USE_PUSHBUFFER
+//#define USE_PUSHBUFFER
 
 struct subImage_s
 {
