@@ -39,6 +39,9 @@
 // for own sow/tow scaling
 #define OWNSCALE 1
 
+#define PRECALC_SOW_RAMX 0.00196f; //0.0019607843
+#define PRECALC_SOW_RAM 0.00195f; //0.001953125
+
 #define CLUTUSED     0x80000000
 
 // Both macros are now inlined -> should give the compiler slightly more room for optimization
@@ -214,11 +217,9 @@ typedef union EXLongTag
 } EXLong;
 
 extern uint32_t ulOLDCOL;
-__forceinline void SETCOL(OGLVertex x) { 
-if(x.c.lcol!=ulOLDCOL) {ulOLDCOL=x.c.lcol;glColor4ubv(x.c.col);}}
+__forceinline void SETCOL(OGLVertex x)	{if(x.c.lcol!=ulOLDCOL)	 {ulOLDCOL=x.c.lcol;  glColor4ubv(x.c.col);}}
+__forceinline void SETPCOL(OGLVertex *x){if(x->c.lcol!=ulOLDCOL) {ulOLDCOL=x->c.lcol; glColor4ubv(x->c.col);}}
 
-__forceinline void SETPCOL(OGLVertex *x) { 
-	if(x->c.lcol!=ulOLDCOL) {ulOLDCOL=x->c.lcol;glColor4ubv(x->c.col);}}
 
 #ifndef _IN_CFG
 

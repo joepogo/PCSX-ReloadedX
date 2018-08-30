@@ -1349,16 +1349,16 @@ void assignTextureVRAMWrite(void)
 {
 #ifdef OWNSCALE
 
- vertex[0].sow=0.5f/ ST_FACVRAMX;
- vertex[0].tow=0.5f/ ST_FACVRAM;
+ vertex[0].sow=PRECALC_SOW_RAMX;
+ vertex[0].tow=PRECALC_SOW_RAM;
 
  vertex[1].sow=(float)gl_ux[1]/ ST_FACVRAMX;
- vertex[1].tow=0.5f/ ST_FACVRAM;
+ vertex[1].tow=PRECALC_SOW_RAM;
 
  vertex[2].sow=(float)gl_ux[2]/ ST_FACVRAMX;
  vertex[2].tow=(float)gl_vy[2]/ ST_FACVRAM;
 
- vertex[3].sow=0.5f/ ST_FACVRAMX;
+ vertex[3].sow=PRECALC_SOW_RAMX;
  vertex[3].tow=(float)gl_vy[3]/ ST_FACVRAM;
 
 #else

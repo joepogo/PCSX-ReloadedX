@@ -121,7 +121,7 @@ void UpdateGlobalTP(unsigned short gdata)
  STATUSREG|=(gdata & 0x07ff);                          // set the necessary bits
 }
 
-unsigned int DoubleBGR2RGB (unsigned int BGR)
+__forceinline unsigned int DoubleBGR2RGB (unsigned int BGR)
 {
  unsigned int ebx,eax,edx;
 
@@ -137,7 +137,7 @@ unsigned int DoubleBGR2RGB (unsigned int BGR)
  return (ebx|eax|edx);
 }
 
-unsigned short BGR24to16 (uint32_t BGR)
+__forceinline unsigned short BGR24to16 (uint32_t BGR)
 {
  return ((BGR>>3)&0x1f)|((BGR&0xf80000)>>9)|((BGR&0xf800)>>6);
 }
