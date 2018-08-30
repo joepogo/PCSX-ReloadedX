@@ -36,13 +36,15 @@ bool CGUIWindowHome::Load()
 	pNewControl = new CGUIControlImage(CONTROL_BACKGROUND_IMAGE, GetWindowID(), 0, 0, 640, 480, "psxbg.jpg");
 	m_vecControls.push_back(pNewControl);
 
-	pNewControl = new CGUIControlList(CONTROL_PSXCDIMAGE_LIST, GetWindowID(), 25, 30, 250, 420);
+	// TODO: 10% tv safe zone to compensate for overscan
+	// TODO: Scale coordinates with resolution (HD modes)
+	pNewControl = new CGUIControlList(CONTROL_PSXCDIMAGE_LIST, GetWindowID(), 64, 128, 250, 420);
 	m_vecControls.push_back(pNewControl);
 
-	pNewControl = new CGUIControlLabel(CONTROL_HEADER_LABEL, GetWindowID(), 430, 30, 100, 50, "PCSX-ReloadedX - Pre-Beta v1.2", "font01", D3DCOLOR_XRGB(255,255,0), 40);
+	pNewControl = new CGUIControlLabel(CONTROL_HEADER_LABEL, GetWindowID(), 430, 40, 100, 50, "PCSX-ReloadedX - Pre-Beta v1.2", "font01", D3DCOLOR_XRGB(255,255,0), 40);
 	m_vecControls.push_back(pNewControl);
 
-	pNewControl = new CGUIControlLabel(CONTROL_SUB_HEADER_LABEL, GetWindowID(), 470, 70, 100, 50, "Images in the D:\\PSXCDS\\*.cue,*.iso folder", "font01", D3DCOLOR_XRGB(255,255,0), 25);
+	pNewControl = new CGUIControlLabel(CONTROL_SUB_HEADER_LABEL, GetWindowID(), 470, 80, 100, 50, "Images in the D:\\PSXCDS\\*.cue,*.iso folder", "font01", D3DCOLOR_XRGB(255,255,0), 25);
 	m_vecControls.push_back(pNewControl);
 
 	// Populate the list with images
