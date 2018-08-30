@@ -2732,8 +2732,8 @@ void LoadSubTexturePageSort(int pageid, int mode, short cx, short cy)
  uint32_t       dy=y2-y1+1;
  int pmult=pageid/16;
  uint32_t      (*LTCOL)(uint32_t);
- unsigned int a,r,g,b,cnt,h;
- uint32_t      scol[8];
+// unsigned int a,r,g,b,cnt,h;
+// uint32_t      scol[8];
  
  LTCOL=TCF[DrawSemiTrans];
 
@@ -2957,7 +2957,7 @@ void LoadSubTexturePageSort(int pageid, int mode, short cx, short cy)
  ta=(uint32_t *)texturepart;
  x1=dx-1;
  y1=dy-1;
-
+/*
  if(bOpaquePass)
   {
    if(bSmallAlpha)
@@ -3069,7 +3069,7 @@ void LoadSubTexturePageSort(int pageid, int mode, short cx, short cy)
      ta++;
     }
   }
-
+*/
  DefineSubTextureSort();
 }
 
@@ -3100,8 +3100,8 @@ void LoadPackedSubTexturePageSort(int pageid, int mode, short cx, short cy)
  uint32_t       dy=y2-y1+1;
  int pmult=pageid/16;
  unsigned short (*LPTCOL)(unsigned short);
- unsigned int a,r,g,b,cnt,h;
- unsigned short scol[8];
+// unsigned int a,r,g,b,cnt,h;
+// unsigned short scol[8];
 
  LPTCOL=PTCF[DrawSemiTrans];
 
@@ -3332,7 +3332,7 @@ void LoadPackedSubTexturePageSort(int pageid, int mode, short cx, short cy)
  ta=(unsigned short *)texturepart;
  x1=dx-1;
  y1=dy-1;      
-
+/*
  if(iTexQuality==1)
 
   {
@@ -3447,7 +3447,7 @@ void LoadPackedSubTexturePageSort(int pageid, int mode, short cx, short cy)
       }
     }
   }
-
+*/
  DefineSubTextureSort();
 }
 
