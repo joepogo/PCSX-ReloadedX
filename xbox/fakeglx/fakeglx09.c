@@ -983,7 +983,7 @@ int d3d_NumVerts = 0;
 // this should be a multiple of 12 to support both GL_QUADS and GL_TRIANGLES
 // it should also be large enough to hold the biggest tristrip or fan in use in the engine
 // individual quads or tris can be submitted in batches
-#define D3D_MAX_VERTEXES	20736//600
+#define D3D_MAX_VERTEXES	1200 //600
 
 typedef struct gl_texcoord_s
 {
@@ -1350,11 +1350,14 @@ void glNormal3f (GLfloat nx, GLfloat ny, GLfloat nz)
 
 void glBegin (GLenum mode)
 {
-	// just store out the mode, all heavy lifting is done in glEnd
-	d3d_PrimitiveMode = mode;
+	if(mode != d3d_PrimitiveMode)
+	{
+		// just store out the mode, all heavy lifting is done in glEnd
+		d3d_PrimitiveMode = mode;
 
-	// begin a new primitive
-	d3d_NumVerts = 0;
+		// begin a new primitive
+		d3d_NumVerts = 0;
+	}
 }
 
 
