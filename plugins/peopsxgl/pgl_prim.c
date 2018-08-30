@@ -149,18 +149,18 @@ unsigned short BGR24to16 (uint32_t BGR)
 static __inline void PRIMdrawTexturedQuad(OGLVertex* vertex1, OGLVertex* vertex2, 
                                    OGLVertex* vertex3, OGLVertex* vertex4) 
 {
- glBegin(GL_TRIANGLE_STRIP);
+glBegin(GL_QUADS);
   glTexCoord2fv(&vertex1->sow);
   glVertex3fv(&vertex1->x);
   
   glTexCoord2fv(&vertex2->sow);
   glVertex3fv(&vertex2->x);
   
-  glTexCoord2fv(&vertex4->sow);
-  glVertex3fv(&vertex4->x);
-  
   glTexCoord2fv(&vertex3->sow);
   glVertex3fv(&vertex3->x);
+
+  glTexCoord2fv(&vertex4->sow);
+  glVertex3fv(&vertex4->x);
  glEnd();
 }
 
@@ -207,7 +207,7 @@ static __inline void PRIMdrawTexGouraudTriColor(OGLVertex* vertex1, OGLVertex* v
 static __inline void PRIMdrawTexGouraudTriColorQuad(OGLVertex* vertex1, OGLVertex* vertex2, 
                                              OGLVertex* vertex3, OGLVertex* vertex4) 
 {
- glBegin(GL_TRIANGLE_STRIP);
+ glBegin(GL_QUADS);
   SETPCOL(vertex1); 
   glTexCoord2fv(&vertex1->sow);
   glVertex3fv(&vertex1->x);
@@ -216,13 +216,13 @@ static __inline void PRIMdrawTexGouraudTriColorQuad(OGLVertex* vertex1, OGLVerte
   glTexCoord2fv(&vertex2->sow);
   glVertex3fv(&vertex2->x);
 
-  SETPCOL(vertex4); 
-  glTexCoord2fv(&vertex4->sow);
-  glVertex3fv(&vertex4->x);
-
   SETPCOL(vertex3); 
   glTexCoord2fv(&vertex3->sow);
   glVertex3fv(&vertex3->x);
+
+  SETPCOL(vertex4); 
+  glTexCoord2fv(&vertex4->sow);
+  glVertex3fv(&vertex4->x);
  glEnd();
 }
 
@@ -242,11 +242,11 @@ static __inline void PRIMdrawTri(OGLVertex* vertex1, OGLVertex* vertex2, OGLVert
 static __inline void PRIMdrawTri2(OGLVertex* vertex1, OGLVertex* vertex2, 
                            OGLVertex* vertex3, OGLVertex* vertex4) 
 {
- glBegin(GL_TRIANGLE_STRIP);                           
+ glBegin(GL_QUADS);
   glVertex3fv(&vertex1->x);
-  glVertex3fv(&vertex3->x);
   glVertex3fv(&vertex2->x);
   glVertex3fv(&vertex4->x);
+  glVertex3fv(&vertex3->x);
  glEnd();
 }
 
@@ -272,18 +272,18 @@ static __inline void PRIMdrawGouraudTriColor(OGLVertex* vertex1, OGLVertex* vert
 static __inline void PRIMdrawGouraudTri2Color(OGLVertex* vertex1, OGLVertex* vertex2, 
                                        OGLVertex* vertex3, OGLVertex* vertex4) 
 {
- glBegin(GL_TRIANGLE_STRIP);                           
+ glBegin(GL_QUADS);
   SETPCOL(vertex1); 
   glVertex3fv(&vertex1->x);
        
-  SETPCOL(vertex3); 
-  glVertex3fv(&vertex3->x);
-
   SETPCOL(vertex2); 
   glVertex3fv(&vertex2->x);
 
   SETPCOL(vertex4); 
   glVertex3fv(&vertex4->x);
+
+  SETPCOL(vertex3);
+  glVertex3fv(&vertex3->x);
  glEnd();
 }
 
@@ -904,7 +904,6 @@ BOOL bDrawOffscreen3(void)
 }
 
 ////////////////////////////////////////////////////////////////////////
-
 BOOL FastCheckAgainstScreen(short imageX0,short imageY0,short imageX1,short imageY1)
 {
  PSXRect_t xUploadArea;

@@ -1000,29 +1000,14 @@ public:
 			case GL_TRIANGLES: dptPrimitiveType = D3DPT_TRIANGLELIST; break;
 			case GL_TRIANGLE_STRIP: dptPrimitiveType = D3DPT_TRIANGLESTRIP; break;
 			case GL_TRIANGLE_FAN: dptPrimitiveType = D3DPT_TRIANGLEFAN; break;
-			case GL_QUADS:
-				if ( m_vertexCount <= 4 ) 
-					dptPrimitiveType = D3DPT_TRIANGLEFAN;
-				else 
-				{
-					dptPrimitiveType = D3DPT_TRIANGLELIST;
-					ConvertQuadsToTriangles();
-				}
-				break;
-			case GL_QUAD_STRIP:
-				if ( m_vertexCount <= 4 ) 
-					dptPrimitiveType = D3DPT_TRIANGLEFAN;
-				else 
-				{
-					dptPrimitiveType = D3DPT_TRIANGLESTRIP;
-					ConvertQuadStripToTriangleStrip();
-				}
-				break;
+			case GL_QUADS: dptPrimitiveType = D3DPT_QUADLIST; break;
+			case GL_QUAD_STRIP: dptPrimitiveType = D3DPT_QUADSTRIP; break;
 
-			case GL_POLYGON:
-				dptPrimitiveType = D3DPT_TRIANGLEFAN;
+			case GL_POLYGON: dptPrimitiveType = D3DPT_TRIANGLEFAN;
 				if ( m_vertexCount < 3) 
 					goto exit;
+				//else
+				//	dptPrimitiveType = D3DPT_POLYGON;
 				// How is this different from GL_TRIANGLE_FAN, other than
 				// that polygons are planar?
 				break;
@@ -1030,21 +1015,13 @@ public:
 				LocalDebugBreak();
 				goto exit;
 		}
-		{
-			DWORD primCount;
-			switch ( dptPrimitiveType ) 
-			{
-				default:
-				case D3DPT_TRIANGLESTRIP: primCount = m_vertexCount - 2; break;
-				case D3DPT_TRIANGLEFAN: primCount = m_vertexCount - 2; break;
-				case D3DPT_TRIANGLELIST: primCount = m_vertexCount / 3; break;
-			}
 
 #ifdef USE_PUSHBUFFER
 			m_pD3DDev->BeginPushBuffer(m_pushBuffer);
 #endif
 			m_pD3DDev->SetVertexShader(m_vertexTypeDesc);
-     		m_pD3DDev->DrawPrimitiveUP(dptPrimitiveType, primCount, m_OGLPrimitiveVertexBuffer, m_vertexSize);
+
+			m_pD3DDev->DrawVerticesUP(dptPrimitiveType, m_vertexCount, m_OGLPrimitiveVertexBuffer, m_vertexSize);
 
 #ifdef USE_PUSHBUFFER
 			m_pD3DDev->EndPushBuffer();
