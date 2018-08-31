@@ -121,7 +121,7 @@ void UpdateGlobalTP(unsigned short gdata)
  STATUSREG|=(gdata & 0x07ff);                          // set the necessary bits
 }
 
-unsigned int DoubleBGR2RGB (unsigned int BGR)
+__forceinline unsigned int DoubleBGR2RGB (unsigned int BGR)
 {
  unsigned int ebx,eax,edx;
 
@@ -137,7 +137,7 @@ unsigned int DoubleBGR2RGB (unsigned int BGR)
  return (ebx|eax|edx);
 }
 
-unsigned short BGR24to16 (uint32_t BGR)
+__forceinline unsigned short BGR24to16 (uint32_t BGR)
 {
  return ((BGR>>3)&0x1f)|((BGR&0xf80000)>>9)|((BGR&0xf800)>>6);
 }
@@ -149,18 +149,18 @@ unsigned short BGR24to16 (uint32_t BGR)
 static __inline void PRIMdrawTexturedQuad(OGLVertex* vertex1, OGLVertex* vertex2, 
                                    OGLVertex* vertex3, OGLVertex* vertex4) 
 {
- glBegin(GL_TRIANGLE_STRIP);
+glBegin(GL_QUADS);
   glTexCoord2fv(&vertex1->sow);
   glVertex3fv(&vertex1->x);
   
   glTexCoord2fv(&vertex2->sow);
   glVertex3fv(&vertex2->x);
   
-  glTexCoord2fv(&vertex4->sow);
-  glVertex3fv(&vertex4->x);
-  
   glTexCoord2fv(&vertex3->sow);
   glVertex3fv(&vertex3->x);
+
+  glTexCoord2fv(&vertex4->sow);
+  glVertex3fv(&vertex4->x);
  glEnd();
 }
 
@@ -207,7 +207,7 @@ static __inline void PRIMdrawTexGouraudTriColor(OGLVertex* vertex1, OGLVertex* v
 static __inline void PRIMdrawTexGouraudTriColorQuad(OGLVertex* vertex1, OGLVertex* vertex2, 
                                              OGLVertex* vertex3, OGLVertex* vertex4) 
 {
- glBegin(GL_TRIANGLE_STRIP);
+ glBegin(GL_QUADS);
   SETPCOL(vertex1); 
   glTexCoord2fv(&vertex1->sow);
   glVertex3fv(&vertex1->x);
@@ -216,13 +216,13 @@ static __inline void PRIMdrawTexGouraudTriColorQuad(OGLVertex* vertex1, OGLVerte
   glTexCoord2fv(&vertex2->sow);
   glVertex3fv(&vertex2->x);
 
-  SETPCOL(vertex4); 
-  glTexCoord2fv(&vertex4->sow);
-  glVertex3fv(&vertex4->x);
-
   SETPCOL(vertex3); 
   glTexCoord2fv(&vertex3->sow);
   glVertex3fv(&vertex3->x);
+
+  SETPCOL(vertex4); 
+  glTexCoord2fv(&vertex4->sow);
+  glVertex3fv(&vertex4->x);
  glEnd();
 }
 
@@ -242,11 +242,11 @@ static __inline void PRIMdrawTri(OGLVertex* vertex1, OGLVertex* vertex2, OGLVert
 static __inline void PRIMdrawTri2(OGLVertex* vertex1, OGLVertex* vertex2, 
                            OGLVertex* vertex3, OGLVertex* vertex4) 
 {
- glBegin(GL_TRIANGLE_STRIP);                           
+ glBegin(GL_QUADS);
   glVertex3fv(&vertex1->x);
-  glVertex3fv(&vertex3->x);
   glVertex3fv(&vertex2->x);
   glVertex3fv(&vertex4->x);
+  glVertex3fv(&vertex3->x);
  glEnd();
 }
 
@@ -272,18 +272,18 @@ static __inline void PRIMdrawGouraudTriColor(OGLVertex* vertex1, OGLVertex* vert
 static __inline void PRIMdrawGouraudTri2Color(OGLVertex* vertex1, OGLVertex* vertex2, 
                                        OGLVertex* vertex3, OGLVertex* vertex4) 
 {
- glBegin(GL_TRIANGLE_STRIP);                           
+ glBegin(GL_QUADS);
   SETPCOL(vertex1); 
   glVertex3fv(&vertex1->x);
        
-  SETPCOL(vertex3); 
-  glVertex3fv(&vertex3->x);
-
   SETPCOL(vertex2); 
   glVertex3fv(&vertex2->x);
 
   SETPCOL(vertex4); 
   glVertex3fv(&vertex4->x);
+
+  SETPCOL(vertex3);
+  glVertex3fv(&vertex3->x);
  glEnd();
 }
 
@@ -390,6 +390,7 @@ void SetSemiTrans(void)
      obm2=TransSets[GlobalTextABR].dstFac;
      glBlendFunc(obm1,obm2);                           // set blend func
     }
+#ifndef _XBOX
    else
    if(TransSets[GlobalTextABR].dstFac !=GL_ONE_MINUS_SRC_COLOR)
     {
@@ -406,16 +407,19 @@ void SetSemiTrans(void)
      obm2=TransSets[GlobalTextABR].dstFac;
      glBlendFunc(GL_ONE,GL_ONE);                       // set blend func
     }
+#endif
   }
 }
 
 void SetScanTrans(void)                                // blending for scan lines
 {
- if(glBlendEquationEXTEx!=NULL) // NULL on XBox
+#ifndef _XBOX
+ if(glBlendEquationEXTEx!=NULL) // NULL on XBox -> no need to check for NULL then
   {
    if(obm2==GL_ONE_MINUS_SRC_COLOR)
     glBlendEquationEXTEx(FUNC_ADD_EXT);
   }
+#endif
 
  obm1=TransSets[0].srcFac;
  obm2=TransSets[0].dstFac;
@@ -424,11 +428,13 @@ void SetScanTrans(void)                                // blending for scan line
 
 void SetScanTexTrans(void)                             // blending for scan mask texture
 {
- if(glBlendEquationEXTEx!=NULL) // NULL on XBox
+#ifndef _XBOX
+ if(glBlendEquationEXTEx!=NULL) // NULL on XBox -> no need to check for NULL then
   {
    if(obm2==GL_ONE_MINUS_SRC_COLOR)
     glBlendEquationEXTEx(FUNC_ADD_EXT);
   }
+#endif
 
  obm1=TransSets[2].srcFac;
  obm2=TransSets[2].dstFac;
@@ -898,7 +904,6 @@ BOOL bDrawOffscreen3(void)
 }
 
 ////////////////////////////////////////////////////////////////////////
-
 BOOL FastCheckAgainstScreen(short imageX0,short imageY0,short imageX1,short imageY1)
 {
  PSXRect_t xUploadArea;

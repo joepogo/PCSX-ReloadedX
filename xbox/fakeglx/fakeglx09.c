@@ -96,6 +96,7 @@ D3DRECT g_ScissorRect;
 #define D3D_SAFE_RELEASE(p) {if (p) (p)->lpVtbl->Release (p);  (p) = NULL;}
 //#define D3D_SAFE_RELEASE(p) {if (p) (p)->Release();            (p)=NULL;} 
 
+
 DWORD GL_ColorToD3D (GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha)
 {
 	return D3DCOLOR_ARGB
@@ -982,7 +983,7 @@ int d3d_NumVerts = 0;
 // this should be a multiple of 12 to support both GL_QUADS and GL_TRIANGLES
 // it should also be large enough to hold the biggest tristrip or fan in use in the engine
 // individual quads or tris can be submitted in batches
-#define D3D_MAX_VERTEXES	600
+#define D3D_MAX_VERTEXES	1200 //600
 
 typedef struct gl_texcoord_s
 {
@@ -1045,9 +1046,10 @@ void GL_SubmitVertexes (void)
 		// transforms via the world matrix.
 		D3DXMATRIX d3d_ViewMatrix;
 
-		// issue a beginscene (geometry needs this
+#ifndef _XBOX
+		// issue a beginscene (geometry needs this)
 		IDirect3DDevice8_BeginScene (d3d_Device);
-
+#endif
 		// force an invalid vertex shader so that the first time will change it
 		D3D_SetVertexShader (D3DFVF_XYZ | D3DFVF_XYZRHW);
 
@@ -1128,13 +1130,16 @@ void GL_SubmitVertexes (void)
 	case GL_TRIANGLES:
 		//OutputDebugString("GL_TRIANGLES\n");
 		// D3DPT_TRIANGLELIST models GL_TRIANGLES when used for either a single triangle or multiple triangles
-		if (gl_CullMode != GL_FRONT_AND_BACK && d3d_NumVerts % 3 == 0 && d3d_NumVerts != 0) IDirect3DDevice8_DrawPrimitiveUP (d3d_Device, D3DPT_TRIANGLELIST, d3d_NumVerts / 3, d3d_Vertexes, sizeof (gl_vertex_t));
+		//if (gl_CullMode != GL_FRONT_AND_BACK && d3d_NumVerts % 3 == 0 && d3d_NumVerts != 0) IDirect3DDevice8_DrawPrimitiveUP (d3d_Device, D3DPT_TRIANGLELIST, d3d_NumVerts / 3, d3d_Vertexes, sizeof (gl_vertex_t));
+		if (gl_CullMode != GL_FRONT_AND_BACK && d3d_NumVerts % 3 == 0 && d3d_NumVerts != 0) IDirect3DDevice8_DrawVerticesUP (d3d_Device, D3DPT_TRIANGLELIST, d3d_NumVerts, d3d_Vertexes, sizeof (gl_vertex_t));
+		
 		break;
 
 	case GL_TRIANGLE_STRIP:
 		//OutputDebugString("GL_TRIANGLE_STRIP\n");
 		// regular tristrip
-		if (gl_CullMode != GL_FRONT_AND_BACK) IDirect3DDevice8_DrawPrimitiveUP (d3d_Device, D3DPT_TRIANGLESTRIP, d3d_NumVerts - 2, d3d_Vertexes, sizeof (gl_vertex_t));
+		//if (gl_CullMode != GL_FRONT_AND_BACK) IDirect3DDevice8_DrawPrimitiveUP (d3d_Device, D3DPT_TRIANGLESTRIP, d3d_NumVerts - 2, d3d_Vertexes, sizeof (gl_vertex_t));
+		if (gl_CullMode != GL_FRONT_AND_BACK) IDirect3DDevice8_DrawVerticesUP (d3d_Device, D3DPT_TRIANGLESTRIP, d3d_NumVerts, d3d_Vertexes, sizeof (gl_vertex_t));
 		break;
 
 	case GL_POLYGON:
@@ -1143,28 +1148,31 @@ void GL_SubmitVertexes (void)
 	case GL_TRIANGLE_FAN:
 		//OutputDebugString("GL_TRIANGLE_FAN\n");
 		// regular trifan
-		if (gl_CullMode != GL_FRONT_AND_BACK) IDirect3DDevice8_DrawPrimitiveUP (d3d_Device, D3DPT_TRIANGLEFAN, d3d_NumVerts - 2, d3d_Vertexes, sizeof (gl_vertex_t));
+		//if (gl_CullMode != GL_FRONT_AND_BACK) IDirect3DDevice8_DrawPrimitiveUP (d3d_Device, D3DPT_TRIANGLEFAN, d3d_NumVerts - 2, d3d_Vertexes, sizeof (gl_vertex_t));
+		if (gl_CullMode != GL_FRONT_AND_BACK) IDirect3DDevice8_DrawVerticesUP (d3d_Device, D3DPT_TRIANGLEFAN, d3d_NumVerts, d3d_Vertexes, sizeof (gl_vertex_t));
 		break;
 
 	case GL_QUADS:
 		//OutputDebugString("GL_QUADS\n");
-
 		if (gl_CullMode == GL_FRONT_AND_BACK) break;
 
 		// quads are a special case of trifans where each quad (numverts / 4) represents a trifan with 2 prims in it
-		for (i = 0; i < d3d_NumVerts; i += 4)
-			IDirect3DDevice8_DrawPrimitiveUP (d3d_Device, D3DPT_TRIANGLEFAN, 2, &d3d_Vertexes[i], sizeof (gl_vertex_t));
+		//for (i = 0; i < d3d_NumVerts; i += 4)
+			IDirect3DDevice8_DrawVerticesUP(d3d_Device, D3DPT_QUADLIST, d3d_NumVerts, d3d_Vertexes, sizeof (gl_vertex_t));
+			//IDirect3DDevice8_DrawPrimitiveUP (d3d_Device, D3DPT_TRIANGLEFAN, 2, &d3d_Vertexes[i], sizeof (gl_vertex_t));
 
 		break;
 
 	case GL_LINES:
-		IDirect3DDevice8_DrawPrimitiveUP (d3d_Device, D3DPT_LINELIST, d3d_NumVerts, d3d_Vertexes, sizeof (gl_vertex_t));
+		//IDirect3DDevice8_DrawPrimitiveUP (d3d_Device, D3DPT_LINELIST, d3d_NumVerts, d3d_Vertexes, sizeof (gl_vertex_t));
+		IDirect3DDevice8_DrawVerticesUP (d3d_Device, D3DPT_LINELIST, d3d_NumVerts, d3d_Vertexes, sizeof (gl_vertex_t));
 		break;
 
 	case GL_QUAD_STRIP:
 		// not as optimal as it could be, so hopefully it won't be used too often!!!
 		if (gl_CullMode == GL_FRONT_AND_BACK) break;
-
+		IDirect3DDevice8_DrawVerticesUP(d3d_Device, D3DPT_QUADSTRIP, d3d_NumVerts, d3d_Vertexes, sizeof (gl_vertex_t));
+/*
 		for (i = 0; ; i += 2)
 		{
 			short quadindexes[4];
@@ -1189,7 +1197,7 @@ void GL_SubmitVertexes (void)
 				sizeof (gl_vertex_t)
 			);
 		}
-
+*/
 		break;
 
 	default:
@@ -1342,11 +1350,14 @@ void glNormal3f (GLfloat nx, GLfloat ny, GLfloat nz)
 
 void glBegin (GLenum mode)
 {
-	// just store out the mode, all heavy lifting is done in glEnd
-	d3d_PrimitiveMode = mode;
+	if(mode != d3d_PrimitiveMode)
+	{
+		// just store out the mode, all heavy lifting is done in glEnd
+		d3d_PrimitiveMode = mode;
 
-	// begin a new primitive
-	d3d_NumVerts = 0;
+		// begin a new primitive
+		d3d_NumVerts = 0;
+	}
 }
 
 
@@ -1940,7 +1951,7 @@ void glGetTexImage (GLenum target, GLint level, GLenum format, GLenum type, GLvo
 	LPDIRECT3DSURFACE8 texsurf;
 	LPDIRECT3DSURFACE8 locksurf;
 	D3DLOCKED_RECT lockrect;
-	D3DSURFACE_DESC desc;
+//	D3DSURFACE_DESC desc;
 
 	if (target != GL_TEXTURE_2D) return;
 	if (type != GL_UNSIGNED_BYTE) return;
@@ -1960,8 +1971,8 @@ void glGetTexImage (GLenum target, GLint level, GLenum format, GLenum type, GLvo
 	}
 
 	// because textures can be different formats we create it as one big enough to hold them all
-	hr = IDirect3DSurface8_GetDesc (texsurf, &desc);
-	hr = IDirect3DDevice8_CreateImageSurface (d3d_Device, desc.Width, desc.Height, D3DFMT_A8R8G8B8, &locksurf);
+	//hr = IDirect3DSurface8_GetDesc (texsurf, &desc);
+	hr = IDirect3DDevice8_CreateImageSurface (d3d_Device, /*desc.Width*/256, /*desc.Height*/256, /*D3DFMT_A8R8G8B8*/D3DFMT_X1R5G5B5, &locksurf);
 	hr = D3DXLoadSurfaceFromSurface (locksurf, NULL, NULL, texsurf, NULL, NULL, D3DX_FILTER_NONE, 0);
 
 	// now we have a surface we can lock
@@ -1969,7 +1980,7 @@ void glGetTexImage (GLenum target, GLint level, GLenum format, GLenum type, GLvo
 	srcdata = (unsigned char *) lockrect.pBits;
 	dstdata = (unsigned char *) pixels;
 
-	for (i = 0; i < desc.Width * desc.Height; i++)
+	for (i = 0; i < /*desc.Width * desc.Height*/65536; i++)
 	{
 		// swap back
 		dstdata[0] = srcdata[2];
@@ -3349,7 +3360,9 @@ int FakeSwapBuffers (void)
 		}
 #endif
 		// endscene and present are only required if a scene was begun (i.e. if something was actually drawn)
+#ifndef _XBOX
 		IDirect3DDevice8_EndScene (d3d_Device);
+#endif
 		d3d_SceneBegun = FALSE;
 
 		// present the display
