@@ -8,12 +8,14 @@
 class CGUIControlLabel : public CGUIControl
 {
 public:
-	CGUIControlLabel(int iControlID, int iWindowID, int iPosX, int iPosY, int iWidth, int iHeight, std::string strText, std::string strFont, DWORD dwColor, unsigned int iSize = 32);
+	CGUIControlLabel(int iControlID, int iWindowID, int iPosX, int iPosY, int iWidth, int iHeight, std::string strFont, std::string strText, DWORD dwColor, unsigned int iSize = 32);
 	~CGUIControlLabel();
 	
 	virtual bool Load();
 	virtual void Cleanup();
 	virtual void Render();
+
+	void Render(DWORD dwColor);
 
 private:
 	std::string m_strText;

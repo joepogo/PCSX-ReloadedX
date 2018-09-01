@@ -358,6 +358,9 @@
 					Name="gui"
 					Filter="">
 					<File
+						RelativePath=".\xbox\gui\guiconfigurations.cpp">
+					</File>
+					<File
 						RelativePath=".\xbox\gui\guicontrol.cpp">
 					</File>
 					<File
@@ -368,9 +371,6 @@
 					</File>
 					<File
 						RelativePath=".\xbox\gui\guimessage.cpp">
-					</File>
-					<File
-						RelativePath=".\xbox\gui\guitexture.cpp">
 					</File>
 					<File
 						RelativePath=".\xbox\gui\guitexturemanager.cpp">
@@ -389,6 +389,9 @@
 						Filter="">
 						<File
 							RelativePath=".\xbox\gui\controls\guicontrolbutton.cpp">
+						</File>
+						<File
+							RelativePath=".\xbox\gui\controls\guicontrolfill.cpp">
 						</File>
 						<File
 							RelativePath=".\xbox\gui\controls\guicontrolimage.cpp">
@@ -410,6 +413,9 @@
 					<Filter
 						Name="windows"
 						Filter="">
+						<File
+							RelativePath=".\xbox\gui\windows\guiwindowglobalconfig.cpp">
+						</File>
 						<File
 							RelativePath=".\xbox\gui\windows\guiwindowhome.cpp">
 						</File>
@@ -656,6 +662,9 @@
 						RelativePath=".\xbox\gui\gui_stdafx.h">
 					</File>
 					<File
+						RelativePath=".\xbox\gui\guiconfigurations.h">
+					</File>
+					<File
 						RelativePath=".\xbox\gui\guicontrol.h">
 					</File>
 					<File
@@ -666,9 +675,6 @@
 					</File>
 					<File
 						RelativePath=".\xbox\gui\guimessage.h">
-					</File>
-					<File
-						RelativePath=".\xbox\gui\guitexture.h">
 					</File>
 					<File
 						RelativePath=".\xbox\gui\guitexturemanager.h">
@@ -695,6 +701,9 @@
 							RelativePath=".\xbox\gui\controls\guicontrolbutton.h">
 						</File>
 						<File
+							RelativePath=".\xbox\gui\controls\guicontrolfill.h">
+						</File>
+						<File
 							RelativePath=".\xbox\gui\controls\guicontrolimage.h">
 						</File>
 						<File
@@ -714,6 +723,9 @@
 					<Filter
 						Name="windows"
 						Filter="">
+						<File
+							RelativePath=".\xbox\gui\windows\guiwindowglobalconfig.h">
+						</File>
 						<File
 							RelativePath=".\xbox\gui\windows\guiwindowhome.h">
 						</File>

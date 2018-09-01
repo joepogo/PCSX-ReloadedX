@@ -1,7 +1,8 @@
 #ifndef H_CGUIMESSAGE
 #define H_CGUIMESSAGE
 
-#define GUI_MSG_CLICKED		01   // Control has been clicked
+#define GUI_MSG_CLICKED      01   // Control has been clicked
+#define GUI_MSG_SETFOCUS     02  
 
 class CGUIMessage
 {
@@ -10,7 +11,7 @@ public:
 	~CGUIMessage();
 
 	int GetMessage() const;
-	int GetSenderID() const;
+	int GetControlID() const;
 
 private:
 	int m_iMessage;

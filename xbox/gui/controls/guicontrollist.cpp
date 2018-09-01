@@ -40,7 +40,7 @@ void CGUIControlList::Render()
 
 		if(pFont)
 		{
-			if(pListItem->IsSelected())
+			if(pListItem->IsSelected() && HasFocus())
 				pFont->Render(m_iPosX, iYPos, 32, D3DCOLOR_XRGB(255,0,0), pListItem->GetName());
 			else
 				pFont->Render(m_iPosX, iYPos, 32, D3DCOLOR_XRGB(0,255,0), pListItem->GetName());

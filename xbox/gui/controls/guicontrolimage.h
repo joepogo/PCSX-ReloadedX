@@ -2,9 +2,15 @@
 #define H_CGUICONTROLIMAGE
 
 #include "..\guicontrol.h"
-#include "..\guitexture.h"
 
+#include "..\gui_stdafx.h"
 #include <string>
+
+struct CUSTOM_IMAGE_VERTEX
+{
+    FLOAT x, y, z , RHW;
+    FLOAT tx, ty;
+};
 
 class CGUIControlImage : public CGUIControl
 {
@@ -17,7 +23,10 @@ public:
 	virtual void Render();
 
 private:
-	CGUITexture m_Image;
+	std::string m_strFilename;
+
+	LPDIRECT3DDEVICE8			m_pd3dDevice;
+	LPDIRECT3DVERTEXBUFFER8		m_pVertexBuffer;
 };
 
 #endif //H_CGUICONTROLIMAGE

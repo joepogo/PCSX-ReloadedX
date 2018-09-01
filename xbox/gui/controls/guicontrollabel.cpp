@@ -3,7 +3,7 @@
 
 using namespace std;
 
-CGUIControlLabel::CGUIControlLabel(int iControlID, int iWindowID, int iPosX, int iPosY, int iWidth, int iHeight, std::string strText, std::string strFont, DWORD dwColor, unsigned int iSize) 
+CGUIControlLabel::CGUIControlLabel(int iControlID, int iWindowID, int iPosX, int iPosY, int iWidth, int iHeight, std::string strFont, std::string strText, DWORD dwColor, unsigned int iSize) 
 : CGUIControl(iControlID, iWindowID, iPosX, iPosY, iWidth, iHeight)
 {
 	m_strText = strText;
@@ -36,6 +36,14 @@ void CGUIControlLabel::Render()
 {
 	if(m_pFont)
 		m_pFont->Render(m_iPosX, m_iPosY, m_iSize, m_dwColor, m_strText);
+
+	CGUIControl::Render();
+}
+
+void CGUIControlLabel::Render(DWORD dwColor)
+{
+	if(m_pFont)
+		m_pFont->Render(m_iPosX, m_iPosY, m_iSize, dwColor, m_strText);
 
 	CGUIControl::Render();
 }

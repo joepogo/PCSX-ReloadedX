@@ -16,7 +16,7 @@ int CGUIMessage::GetMessage() const
 	return m_iMessage;
 }
 
-int CGUIMessage::GetSenderID() const
+int CGUIMessage::GetControlID() const
 {
 	return m_iControlID;
 }

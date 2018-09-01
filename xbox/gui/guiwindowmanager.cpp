@@ -1,8 +1,10 @@
 #include "guiwindowmanager.h"
 #include "guiwindowkeys.h"
 
+// Windows
 #include "windows\guiwindowhome.h"
 #include "windows\guiwindowingameconfig.h"
+#include "windows\guiwindowglobalconfig.h"
 
 CGUIWindowManager::CGUIWindowManager()
 {
@@ -18,10 +20,13 @@ bool CGUIWindowManager::InitWindows()
 	// Create our windows
 	CGUIWindow* pNewWindow = NULL;
 
-	pNewWindow = new CGUIWindowHome(WINDOW_HOME, 02);
+	pNewWindow = new CGUIWindowHome(WINDOW_HOME, 102);
 	m_vecWindows.push_back(pNewWindow);
 
-	pNewWindow = new CGUIWindowInGameConfig(WINDOW_INGAME_CONFIG, 02);
+	pNewWindow = new CGUIWindowInGameConfig(WINDOW_INGAME_CONFIG, 102);
+	m_vecWindows.push_back(pNewWindow);
+
+	pNewWindow = new CGUIWindowGlobalConfig(WINDOW_GLOBAL_CONFIG, 102);
 	m_vecWindows.push_back(pNewWindow);
 
 	// Now load them

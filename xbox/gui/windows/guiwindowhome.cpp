@@ -1,22 +1,28 @@
 #include "guiwindowhome.h"
 #include "..\utils\stringutils.h"
 #include "..\..\..\libpcsxcore\system.h"
+#include "..\guiwindowkeys.h"
 #include "..\..\xbox.h"
 
 #include "..\controls\guicontrollist.h"
 #include "..\controls\guicontrollabel.h"
 #include "..\controls\guicontrolimage.h"
+#include "..\controls\guicontrolfill.h"
+#include "..\controls\guicontrolbutton.h"
 
 using namespace std;
 
 #define PATH "D:\\psxcds\\" // TODO: Get from config
 
 // Control(s)
-#define CONTROL_BACKGROUND_IMAGE	01
-#define CONTROL_PSXCDIMAGE_LIST		02
-#define CONTROL_HEADER_LABEL		03
-#define CONTROL_SUB_HEADER_LABEL	04
-
+#define CONTROL_BACKGROUND_IMAGE            101
+#define CONTROL_PSXCDIMAGE_LIST             102
+#define CONTROL_HEADER_LABEL                103
+#define CONTROL_SUB_HEADER_LABEL            104
+#define CONTROL_BACKGROUND_FILL             105
+#define CONTROL_IMAGES_BACKGROUND_FILL      106
+#define CONTROL_BUTTON_CONFIG               107
+#define CONTROL_BUTTON_QUITDASH             108
 
 CGUIWindowHome::CGUIWindowHome(int iWindowID, int iDefaultControlID) 
 : CGUIWindow(iWindowID, iDefaultControlID)
@@ -36,17 +42,34 @@ bool CGUIWindowHome::Load()
 	pNewControl = new CGUIControlImage(CONTROL_BACKGROUND_IMAGE, GetWindowID(), 0, 0, 640, 480, "psxbg.jpg");
 	m_vecControls.push_back(pNewControl);
 
+	pNewControl = new CGUIControlFill(CONTROL_BACKGROUND_FILL, GetWindowID(), 40, 250, 225, 200, D3DCOLOR_XRGB(0,0,128));
+	m_vecControls.push_back(pNewControl);
+
+	pNewControl = new CGUIControlFill(CONTROL_IMAGES_BACKGROUND_FILL, GetWindowID(), 315, 60, 300, 390, D3DCOLOR_XRGB(0,0,128));
+	m_vecControls.push_back(pNewControl);
+
+	pNewControl = new CGUIControlButton(CONTROL_BUTTON_CONFIG, GetWindowID(), 100, 520, 100, 30, "font01", "Global Configuration", D3DCOLOR_XRGB(0,255,0), D3DCOLOR_XRGB(255,0,0), 38, WINDOW_GLOBAL_CONFIG);
+	pNewControl->SetRight(CONTROL_PSXCDIMAGE_LIST);
+	pNewControl->SetDown(CONTROL_BUTTON_QUITDASH);
+	m_vecControls.push_back(pNewControl);
+
+	pNewControl = new CGUIControlButton(CONTROL_BUTTON_QUITDASH, GetWindowID(), 100, 560, 100, 30, "font01", "Quit to Dashboard", D3DCOLOR_XRGB(0,255,0), D3DCOLOR_XRGB(255,0,0), 38);
+	pNewControl->SetRight(CONTROL_PSXCDIMAGE_LIST);
+	pNewControl->SetUp(CONTROL_BUTTON_CONFIG);
+	m_vecControls.push_back(pNewControl);
+
 	// TODO: 10% tv safe zone to compensate for overscan
 	// TODO: Scale coordinates with resolution (HD modes)
-	pNewControl = new CGUIControlList(CONTROL_PSXCDIMAGE_LIST, GetWindowID(), 64, 128, 250, 420);
+	pNewControl = new CGUIControlList(CONTROL_PSXCDIMAGE_LIST, GetWindowID(), 650, 128, 250, 420); // FIXME: Coordinates don't match screen
+	pNewControl->SetLeft(CONTROL_BUTTON_CONFIG);
 	m_vecControls.push_back(pNewControl);
 
-	pNewControl = new CGUIControlLabel(CONTROL_HEADER_LABEL, GetWindowID(), 430, 40, 100, 50, "PCSX-ReloadedX - Pre-Beta v1.2", "font01", D3DCOLOR_XRGB(255,255,0), 40);
+	pNewControl = new CGUIControlLabel(CONTROL_HEADER_LABEL, GetWindowID(), 430, 40, 100, 50, "font01", "PCSX-ReloadedX - Pre-Beta v1.2", D3DCOLOR_XRGB(255,255,0), 40);
 	m_vecControls.push_back(pNewControl);
 
-	pNewControl = new CGUIControlLabel(CONTROL_SUB_HEADER_LABEL, GetWindowID(), 470, 80, 100, 50, "Images in the D:\\PSXCDS\\*.cue,*.iso folder", "font01", D3DCOLOR_XRGB(255,255,0), 25);
+	pNewControl = new CGUIControlLabel(CONTROL_SUB_HEADER_LABEL, GetWindowID(), 470, 80, 100, 50, "font01", "Images in the D:\\PSXCDS\\*.cue,*.iso folder", D3DCOLOR_XRGB(255,255,0), 25);
 	m_vecControls.push_back(pNewControl);
-
+	
 	// Populate the list with images
 	if(!GetPSXImages())
 		SysMessage("Unable to load CD Images.\n");
@@ -60,7 +83,7 @@ bool CGUIWindowHome::OnMessage(CGUIMessage message)
 	{
 		case GUI_MSG_CLICKED:
 		{
-			if(message.GetSenderID() == CONTROL_PSXCDIMAGE_LIST) // A PSX CD image has been clicked
+			if(message.GetControlID() == CONTROL_PSXCDIMAGE_LIST) // A PSX CD image has been clicked
 			{
 				CGUIControlList* pCtrlPSXCDList = (CGUIControlList*)GetControl(CONTROL_PSXCDIMAGE_LIST);
 
@@ -73,6 +96,11 @@ bool CGUIWindowHome::OnMessage(CGUIMessage message)
 
 					return true;
 				}
+			}
+			else if (message.GetControlID() == CONTROL_BUTTON_QUITDASH)
+			{
+				SysClose();
+				return true;
 			}
 		}
 		break;

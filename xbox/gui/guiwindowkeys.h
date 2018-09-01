@@ -1,8 +1,9 @@
 #ifndef H_GUIWINDOWKEYS
 #define H_GUIWINDOWKEYS
 
-#define WINDOW_UNKNOWEN			00
-#define WINDOW_HOME				01
-#define WINDOW_INGAME_CONFIG	02
+#define WINDOW_INVALID          00
+#define WINDOW_HOME             01
+#define WINDOW_INGAME_CONFIG    02
+#define WINDOW_GLOBAL_CONFIG    03
 
 #endif //H_GUIWINDOWKEYS
