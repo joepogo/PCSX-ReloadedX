@@ -438,6 +438,7 @@ static int LoadSPUplugin(const char *SPUdll) {
 	SPU_readRegister = &Plugin_SPUreadRegister;
 	SPU_writeDMA = &Plugin_SPUwriteDMA;
 	SPU_writeDMAMem = &Plugin_SPUwriteDMAMem;
+	SPU_readDMAMem = &Plugin_SPUreadDMAMem;
 	SPU_readDMA = &Plugin_SPUreadDMA;
 	SPU_writeDMAMem = &Plugin_SPUwriteDMAMem;
 	SPU_playADPCMchannel = &Plugin_SPUplayADPCMchannel;
