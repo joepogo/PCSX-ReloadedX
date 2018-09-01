@@ -52,10 +52,9 @@ void CGUIControlButton::Render()
 bool CGUIControlButton::OnKey(int iKey)
 {
 	if(iKey == K_XBOX_A)
+	{
 		OnClick();
 
-	if(iKey == K_XBOX_A)
-	{
 		CGUIMessage msg(GUI_MSG_CLICKED, GetParentID(), GetID());
 		g_XBoxGUI.m_GUIWindowManager.OnMessage(msg);
 	}
