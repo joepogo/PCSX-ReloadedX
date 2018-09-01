@@ -358,9 +358,6 @@
 					Name="gui"
 					Filter="">
 					<File
-						RelativePath=".\xbox\gui\guiconfigurations.cpp">
-					</File>
-					<File
 						RelativePath=".\xbox\gui\guicontrol.cpp">
 					</File>
 					<File
@@ -660,9 +657,6 @@
 					Filter="">
 					<File
 						RelativePath=".\xbox\gui\gui_stdafx.h">
-					</File>
-					<File
-						RelativePath=".\xbox\gui\guiconfigurations.h">
 					</File>
 					<File
 						RelativePath=".\xbox\gui\guicontrol.h">

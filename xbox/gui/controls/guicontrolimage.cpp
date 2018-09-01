@@ -41,7 +41,7 @@ bool CGUIControlImage::Load()
 void CGUIControlImage::Cleanup()
 {
 	m_bResoucesAlocated = false;
-    m_pVertexBuffer->Release();
+	m_pVertexBuffer->Release();
 }
 
 void CGUIControlImage::Render()
@@ -49,24 +49,24 @@ void CGUIControlImage::Render()
 	VOID* pVertices;
 
 	CUSTOM_IMAGE_VERTEX cvVertices[] =
-    {
-        { (FLOAT)m_iPosX, (FLOAT)m_iPosY, 0.5f, 1.0f, 0, 0, },
-        { (FLOAT)m_iPosX+m_iWidth, (FLOAT)m_iPosY, 0.5f, 1.0f, 1, 0, },
-        { (FLOAT)m_iPosX, (FLOAT)m_iHeight+m_iPosY, 0.5f, 1.0f, 0, 1, },
+	{
+		{ (FLOAT)m_iPosX, (FLOAT)m_iPosY, 0.5f, 1.0f, 0, 0, },
+		{ (FLOAT)m_iPosX+m_iWidth, (FLOAT)m_iPosY, 0.5f, 1.0f, 1, 0, },
+		{ (FLOAT)m_iPosX, (FLOAT)m_iHeight+m_iPosY, 0.5f, 1.0f, 0, 1, },
 		{ (FLOAT)m_iPosX+(FLOAT)m_iWidth, (FLOAT)m_iPosY+m_iHeight, 0.5f, 1.0f, 1, 1, },
 	};
 
-    // Get a pointer to the vertex buffer vertices and lock the vertex buffer
-    m_pVertexBuffer->Lock(0, sizeof(cvVertices), (BYTE**)&pVertices, 0);
+	// Get a pointer to the vertex buffer vertices and lock the vertex buffer
+	m_pVertexBuffer->Lock(0, sizeof(cvVertices), (BYTE**)&pVertices, 0);
 
-    // Copy our stored vertices values into the vertex buffer
-    memcpy(pVertices, cvVertices, sizeof(cvVertices));
+	// Copy our stored vertices values into the vertex buffer
+	memcpy(pVertices, cvVertices, sizeof(cvVertices));
 
-    // Unlock the vertex buffer
-    m_pVertexBuffer->Unlock();
+	// Unlock the vertex buffer
+	m_pVertexBuffer->Unlock();
 
-    m_pd3dDevice->SetStreamSource(0, m_pVertexBuffer, sizeof(CUSTOM_IMAGE_VERTEX));
-    m_pd3dDevice->SetVertexShader(CUSTOMFVF);
+	m_pd3dDevice->SetStreamSource(0, m_pVertexBuffer, sizeof(CUSTOM_IMAGE_VERTEX));
+	m_pd3dDevice->SetVertexShader(CUSTOMFVF);
 
 	// Set our texture
 	m_pd3dDevice->SetTexture(0, g_XBoxGUI.m_GUITextureManager.GetTexture(m_strFilename));
