@@ -556,7 +556,7 @@ void SetAutoFrameCap(void)
 
 void InitFrameCap(void)                                // inits cpu frequency info (on gpu startup)
 {
-#if 0 //ndef _XBOX // Removes the need to patch for 1.4ghz modded XBox
+#if 1 //ndef _XBOX // Disabling this removes the need to patch for a 1.4ghz modded XBox	(not reliable tho, causes timing issues)
  if (QueryPerformanceFrequency (&liCPUFrequency))
       bIsPerformanceCounter = TRUE;
  else bIsPerformanceCounter = FALSE;
